@@ -41,6 +41,7 @@ echo "CLIENT_ID=$CLIENT_ID"
 curl "http://$KEYCLOAK_URL/auth/admin/realms/company-services/clients/$CLIENT_ID" -H "Authorization: Bearer $ADMIN_TOKEN"
 
 echo
+echo
 echo "Creating client role"
 echo "===================="
 

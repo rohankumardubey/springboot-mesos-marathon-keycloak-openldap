@@ -24,46 +24,44 @@
 
 ### Create a new Realm
 
-- Go to top-left corner and hover the mouse over `Master` realm. A blue button `Add realm` will appear. Click on it.
-- On `Name` field, write `company-services`. Click on `Create`.
+- Go to top-left corner and hover the mouse over `Master` realm. Click the `Add realm` blue button that will appear
+- Set `company-services` to the `Name` field and click `Create` button
 
 ### Create a new Client
 
-- Click on `Clients` menu on the left.
-- Click `Create` button.
-- On `Client ID` field type `simple-service`.
-- Click on `Save`.
-- On the `Settings` tab, set the `Valid Redirect URIs` to `http://localhost:9080/*`. (just because it is mandatory as this field is not important for this example)
-- On `Advanced Settings`, in `Proof Key for Code Exchange Code Challenge Method` set `S256`.
-- Click on `Save`.
-- Go to `Roles` tab.
-- Click `Add Role` button.
-- On `Role Name` type `USER`.
-- Click on `Save`.
+- On the left menu, click `Clients`
+- Click `Create` button
+- Set `simple-service` to `Client ID` and click `Save` button
+- In the `Settings` tab, set `http://localhost:9080/*` to `Valid Redirect URIs`. (just because it is mandatory as this field is not important for this example)
+- On `Advanced Settings`, set `S256` to `Proof Key for Code Exchange Code Challenge Method`
+- Click `Save` button
+- In `Roles` tab
+  - Click `Add Role` button
+  - Set `USER` to `Role Name` and click `Save` button
 
 ### LDAP Integration
 
-- Click on the `User Federation` menu on the left.
-- Select `ldap`.
-- On `Vendor` field select `Other`
-- On `Connection URL` type `ldap://ldap-host`.
-- Click on `Test connection` button, to check if the connection is OK.
-- On `Users DN` type `ou=users,dc=mycompany,dc=com`
-- On `Bind DN` type `cn=admin,dc=mycompany,dc=com`
-- On `Bind Credential` set `admin`
-- Click on `Test authentication` button, to check if the authentication is OK.
-- On `Custom User LDAP Filter` set `(gidnumber=500)` to just get developers.
-- Click on `Save`.
-- Click on `Synchronize all users`.
+- On the left menu, click `User Federation`
+- Select `ldap`
+- Select `Other` for `Vendor`
+- Set `ldap://openldap` to `Connection URL`
+- Click `Test connection` button, to check if the connection is OK
+- Set `ou=users,dc=mycompany,dc=com` to `Users DN`
+- Set `(gidnumber=500)` to `Custom User LDAP Filter` (filter just developers)
+- Set `cn=admin,dc=mycompany,dc=com` to `Bind DN`
+- Set `admin` to `Bind Credential`
+- Click `Test authentication` button, to check if the authentication is OK
+- Click `Save` button
+- Click `Synchronize all users` button
 
 ### Configure users imported
 
-- Click on `Users` menu on the left
-- Click on `View all users`. 3 users will be shown
-- Edit user `bgates`
-- Go to `Role Mappings` tab
-- In the search field `Client Roles`, type `simple-service`. It will appear. Select it
-- Select the role `USER` present in `Available Roles` and click on `Add selected`
-- Done. `bgates` has now the role `USER` as one of his `Assigned Roles`
+- On the left menu, click `Users`
+- Click `View all users` button. 3 users should be shown
+- Edit user `bgates` by clicking on its `ID` or `Edit` button
+- In `Role Mappings` tab
+    - Select `simple-service` in `Client Roles` combo-box
+    - Select `USER` role present in `Available Roles` and click `Add selected`
+    - `bgates` has now `USER` role as one of his `Assigned Roles`
 - Do the same for the user `sjobs`
 - Let's leave `mcuban` without `USER` role

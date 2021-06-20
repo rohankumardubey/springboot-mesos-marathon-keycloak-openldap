@@ -28,32 +28,34 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
    ```
 
    Unfortunately, it's not possible to do it by using `Docker Desktop` UI. So, we need to do it manually by following the next steps:
-   - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
-   - At the top of the file you will see an array that looks like this:
+   - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor; 
+   - Look for `filesharingDirectories`. It should look like
      ```
-     "filesharingDirectories" : [
-       "\/Users",
-       "\/Volumes",
-       "\/private",
-       "\/tmp"
+     "filesharingDirectories": [
+       "/Users",
+       "/Volumes",
+       "/private",
+       "/tmp",
+       "/var/folders"
      ],
      ```
    - Append the following line:
      ```
-     "\/var\/lib"
+     "/var/lib"
      ```
-   - The new array should now look like the one below (mind the comma after `"\/tmp"`):
+   - The new array should now look like the one below (mind the comma after `"\var/folders"`):
      ```
-     "filesharingDirectories" : [
-       "\/Users",
-       "\/Volumes",
-       "\/private",
-       "\/tmp",
-       "\/var\/lib"
+     "filesharingDirectories": [
+       "/Users",
+       "/Volumes",
+       "/private",
+       "/tmp",
+       "/var/folders",
+       "/var/lib"
      ],
      ```
-   - Save the file and exit;
-   - Restart `Docker Desktop`.
+   - Save the file and exit
+   - Restart `Docker Desktop`
 
 ## Start Environment
 
@@ -64,12 +66,12 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   export HOST_IP_ADDR=...
   ```
 
-- Then, run the following command
+- Run the following command
   ```
   docker-compose up -d
   ```
 
-- Wait a bit until `zookeeper`, `mysql-keycloak` and `mesos-master` containers are Up (healthy). In order to check it run
+- Wait a bit until `zookeeper`, `mysql` and `mesos-master` containers are Up (healthy). In order to check it run
   ```
   docker-compose ps
   ```
@@ -125,12 +127,12 @@ To import those users to `OpenLDAP`
   ![mesos](images/mesos.png)
 
   - On `Active Tasks` section, find the task `keycloak` and click on `Sandbox` (last link on the right)
-  - Then, click on `stdout`
-  - A window will open, and the logs will be displayed real-time
+  - Click on `stdout`
+  - A window will open showing the logs at real-time
 
 ## Getting Keycloak Address
 
-When `Keycloak` is deployed in `Marathon`, it's assigned to it a host and port. There are two ways to obtain it
+When `Keycloak` is deployed to `Marathon`, it's assigned a host and port to it. There are two ways to obtain it
 
 1. Running the following command in a terminal 
    ```
@@ -236,18 +238,23 @@ When `simple-service` is deployed in `Marathon`, it's assigned to it a host and 
 
 ## Shutdown
 
-- Go to `Marathon` and click on `simple-service` application
-- On the next page, click on the `gear` symbol and then on `Destroy`
+- Go to `Marathon` and click `simple-service` application
+- In the next page, click the `gear` symbol and then on `Destroy`
 - Confirm the destruction of the application
 - Do the same for `keycloak` application
 
-- After that, go to a terminal and, inside `springboot-mesos-marathon-keycloak-openldap` root folder, run
+- Go to a terminal and, inside `springboot-mesos-marathon-keycloak-openldap` root folder, run
   ```
   docker-compose down -v
   docker rm -v $(docker ps -a -f status=exited -f status=created -q)
   ```
 
 - Undo changes in `~/Library/Group\ Containers/group.com.docker/settings.json` file
-  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
-  - Remove `"\/var\/lib"` of the `filesharingDirectories` array present at the top of file;
-  - Restart `Docker Desktop`.
+  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor
+  - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
+  - Restart `Docker Desktop`
+
+- To remove the Docker image created in this project, run
+  ```
+  docker rmi ivanfranchin/simple-service:1.0.0
+  ```

@@ -11,7 +11,7 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "docker.mycompany.com/simple-service:1.0.0"
+      "image": "ivanfranchin/simple-service:1.0.0"
     },
     "portMappings": [
       {
