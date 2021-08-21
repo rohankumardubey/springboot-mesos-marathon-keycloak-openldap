@@ -72,7 +72,7 @@ services:
 #      start_period: 20s
 
   mysql:
-    image: mysql:5.7.34
+    image: mysql:5.7.35
     container_name: mysql
     ports:
       - 3306:3306
