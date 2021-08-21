@@ -43,7 +43,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
      ```
      "/var/lib"
      ```
-   - The new array should now look like the one below (mind the comma after `"\var/folders"`):
+   - The new array should now look like the one below (mind the comma after `"/var/folders"`):
      ```
      "filesharingDirectories": [
        "/Users",
