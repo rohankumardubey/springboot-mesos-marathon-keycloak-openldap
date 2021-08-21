@@ -254,7 +254,9 @@ When `simple-service` is deployed in `Marathon`, it's assigned to it a host and 
   - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
   - Restart `Docker Desktop`
 
-- To remove the Docker image created in this project, run
-  ```
-  docker rmi ivanfranchin/simple-service:1.0.0
-  ```
+## Cleanup
+
+To remove the Docker image created in this project, go to a terminal and run the command below
+```
+docker rmi ivanfranchin/simple-service:1.0.0
+```
