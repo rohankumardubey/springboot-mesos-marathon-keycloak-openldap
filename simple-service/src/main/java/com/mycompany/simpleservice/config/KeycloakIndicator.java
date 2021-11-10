@@ -38,5 +38,4 @@ public class KeycloakIndicator implements HealthIndicator {
         }
         return 0;
     }
-
 }

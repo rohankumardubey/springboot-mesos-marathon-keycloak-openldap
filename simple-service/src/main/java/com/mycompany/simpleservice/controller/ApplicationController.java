@@ -19,5 +19,4 @@ public class ApplicationController {
     public String getPrivateString(Principal principal) {
         return principal.getName() + ", it is private.\n";
     }
-
 }

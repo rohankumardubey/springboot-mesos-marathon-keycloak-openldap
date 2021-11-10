@@ -2,7 +2,7 @@
 
 ## Configure Keycloak Manually
 
-![keycloak](images/keycloak.png)
+![keycloak](documentation/keycloak.png)
 
 ### Login
 
@@ -10,9 +10,9 @@
 
   1. In a terminal, run the commands below and access the link printed from the echo command
      ```
-     KEYCLOAK_ADDR="$(curl -s http://localhost:8090/v2/apps/keycloak | jq -r '.app.tasks[0].host'):$(curl -s http://localhost:8090/v2/apps/keycloak | jq '.app.tasks[0].ports[0]')"
+     KEYCLOAK_HOST_PORT="$(curl -s http://localhost:8090/v2/apps/keycloak | jq -r '.app.tasks[0].host'):$(curl -s http://localhost:8090/v2/apps/keycloak | jq '.app.tasks[0].ports[0]')"
 
-     echo "http://$KEYCLOAK_ADDR/auth/admin/"
+     echo "http://$KEYCLOAK_HOST_PORT/auth/admin/"
      ```
   1. Using [`Marathon`](http://localhost:8090)
 
