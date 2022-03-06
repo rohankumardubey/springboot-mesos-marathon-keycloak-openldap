@@ -24,7 +24,7 @@
   "mem": 128,
   "instances": 1,
   "env": {
-    "keycloak.auth-server-url": "http://127.0.0.1:8080/auth"
+    "keycloak.auth-server-url": "http://127.0.0.1:8080"
   },
   "healthChecks": [
     {

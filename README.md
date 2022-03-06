@@ -16,46 +16,12 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
-## Warning: Mac Users
+## Mac Users
 
-   After some recent `Docker Desktop` updates, we need to add a new directory called `/var/lib` to Docker `File Sharing` resources, otherwise we will see an exception like
-   ```
-   docker: Error response from daemon: Mounts denied: 
-   The path /var/lib/mesos/slaves/347adc13-aad3-4c25-9864-ee2ebcc97572-S0/frameworks/347adc13-aad3-4c25-9864-ee2ebcc97572-0000/executors/keycloak.05642772-1ae3-11eb-aecf-0242ac120007/runs/33e0751e-1a0a-40d8-b9f8-cfa706679172
-   is not shared from OS X and is not known to Docker.
-   You can configure shared paths from Docker -> Preferences... -> File Sharing.
-   See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
-   ```
-
-   Unfortunately, it's not possible to do it by using `Docker Desktop` UI. So, we need to do it manually by following the next steps:
-   - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor; 
-   - Look for `filesharingDirectories`. It should look like
-     ```
-     "filesharingDirectories": [
-       "/Users",
-       "/Volumes",
-       "/private",
-       "/tmp",
-       "/var/folders"
-     ],
-     ```
-   - Append the following line:
-     ```
-     "/var/lib"
-     ```
-   - The new array should now look like the one below (mind the comma after `"/var/folders"`):
-     ```
-     "filesharingDirectories": [
-       "/Users",
-       "/Volumes",
-       "/private",
-       "/tmp",
-       "/var/folders",
-       "/var/lib"
-     ],
-     ```
-   - Save the file and exit
-   - Restart `Docker Desktop`
+A new directory called `/var/lib` must be added to Docker `File Sharing` resources. For it, follow the steps below
+- Go to **Docker Desktop** and open `Preferences...` > `Resources` > `File Sharing`
+- Add `/var/lib`
+- Click `Apply & Restart` button
 
 ## Start Environment
 
@@ -79,7 +45,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 ## Service's URL
 
 | Service  | URL                   |
-| -------- | --------------------- |
+|----------|-----------------------|
 | Mesos    | http://localhost:5050 |
 | Marathon | http://localhost:8090 |
 
@@ -105,9 +71,9 @@ To import those users to `OpenLDAP`
 
 - In a terminal, make sure you are in `springboot-mesos-marathon-keycloak-openldap` root folder
 
-- Run the following command to build `simple-service` Docker Image
+- Run the following script to build `simple-service` Docker Image
   ```
-  ./mvnw clean compile jib:dockerBuild --projects simple-service
+  ./docker-build.sh
   ```
 
 ## Deploy Keycloak to Marathon
@@ -216,7 +182,7 @@ When `simple-service` is deployed in `Marathon`, it's assigned to it a host and 
 - Get `bgates` access token
   ```
   BGATES_ACCESS_TOKEN=$(curl -s -X POST \
-    "http://$KEYCLOAK_HOST_PORT/auth/realms/company-services/protocol/openid-connect/token" \
+    "http://$KEYCLOAK_HOST_PORT/realms/company-services/protocol/openid-connect/token" \
     -H "Content-Type: application/x-www-form-urlencoded" \
     -d "username=bgates" \
     -d "password=123" \
@@ -251,14 +217,14 @@ When `simple-service` is deployed in `Marathon`, it's assigned to it a host and 
 
 ## Cleanup
 
-- To remove the Docker image created in this project, go to a terminal and run the command below
+- To remove the Docker image created in this project, go to a terminal and, inside `springboot-mesos-marathon-keycloak-openldap` root folder, run the script below
   ```
-  docker rmi ivanfranchin/simple-service:1.0.0
+  ./remove-docker-images.sh
   ```
 
 - **Mac Users**
   
-  Undo changes in `~/Library/Group\ Containers/group.com.docker/settings.json` file
-  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor
-  - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
-  - Restart `Docker Desktop`
+  Remove `/var/lib` added to Docker `File Sharing` resources
+  - Go to **Docker Desktop** and open `Preferences...` > `Resources` > `File Sharing`
+  - Remove `/var/lib` by clicking the `-` (minus) icon
+  - Click `Apply & Restart` button

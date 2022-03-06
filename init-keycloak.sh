@@ -9,7 +9,7 @@ echo "Getting admin access token"
 echo "=========================="
 
 ADMIN_TOKEN=$(curl -s -X POST \
-"http://$KEYCLOAK_HOST_PORT/auth/realms/master/protocol/openid-connect/token" \
+"http://$KEYCLOAK_HOST_PORT/realms/master/protocol/openid-connect/token" \
 -H "Content-Type: application/x-www-form-urlencoded" \
 -d "username=admin" \
 -d 'password=admin' \
@@ -22,7 +22,7 @@ echo
 echo "Creating realm"
 echo "=============="
 
-curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms" \
+curl -i -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{"realm": "company-services", "enabled": true}'
@@ -30,7 +30,7 @@ curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms" \
 echo "Creating client"
 echo "==============="
 
-CLIENT_ID=$(curl -si -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/clients" \
+CLIENT_ID=$(curl -si -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/clients" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{"clientId": "simple-service", "directAccessGrantsEnabled": true, "publicClient": true, "redirectUris": ["http://localhost:9080/*"]}' \
@@ -38,19 +38,19 @@ CLIENT_ID=$(curl -si -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/compa
 
 echo "CLIENT_ID=$CLIENT_ID"
 
-curl "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/clients/$CLIENT_ID" -H "Authorization: Bearer $ADMIN_TOKEN"
+curl "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/clients/$CLIENT_ID" -H "Authorization: Bearer $ADMIN_TOKEN"
 
 echo
 echo
 echo "Creating client role"
 echo "===================="
 
-curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/clients/$CLIENT_ID/roles" \
+curl -i -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/clients/$CLIENT_ID/roles" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{"name": "USER"}'
 
-ROLE_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/clients/$CLIENT_ID/roles" \
+ROLE_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/clients/$CLIENT_ID/roles" \
 -H "Authorization: Bearer $ADMIN_TOKEN" | jq -r '.[0].id')
 
 echo "ROLE_ID=$ROLE_ID"
@@ -59,7 +59,7 @@ echo
 echo "Configuring LDAP"
 echo "================"
 
-LDAP_ID=$(curl -si -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/components" \
+LDAP_ID=$(curl -si -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/components" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '@ldap/ldap-config.json' \
@@ -71,7 +71,7 @@ echo
 echo "Sync LDAP Users"
 echo "==============="
 
-curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/user-storage/$LDAP_ID/sync?action=triggerFullSync" \
+curl -i -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/user-storage/$LDAP_ID/sync?action=triggerFullSync" \
 -H "Authorization: Bearer $ADMIN_TOKEN"
 
 echo
@@ -79,7 +79,7 @@ echo
 echo "Get bgates id"
 echo "============="
 
-BGATES_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/users?username=bgates" \
+BGATES_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/users?username=bgates" \
 -H "Authorization: Bearer $ADMIN_TOKEN"  | jq -r '.[0].id')
 
 echo "BGATES_ID=$BGATES_ID"
@@ -88,7 +88,7 @@ echo
 echo "Setting client role to bgates"
 echo "============================="
 
-curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/users/$BGATES_ID/role-mappings/clients/$CLIENT_ID" \
+curl -i -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/users/$BGATES_ID/role-mappings/clients/$CLIENT_ID" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '[{"id":"'"$ROLE_ID"'","name":"USER"}]'
@@ -96,7 +96,7 @@ curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/u
 echo "Get sjobs id"
 echo "============"
 
-SJOBS_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/users?username=sjobs" \
+SJOBS_ID=$(curl -s "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/users?username=sjobs" \
 -H "Authorization: Bearer $ADMIN_TOKEN"  | jq -r '.[0].id')
 
 echo "SJOBS_ID=$SJOBS_ID"
@@ -105,7 +105,7 @@ echo
 echo "Setting client role to sjobs"
 echo "============================"
 
-curl -i -X POST "http://$KEYCLOAK_HOST_PORT/auth/admin/realms/company-services/users/$SJOBS_ID/role-mappings/clients/$CLIENT_ID" \
+curl -i -X POST "http://$KEYCLOAK_HOST_PORT/admin/realms/company-services/users/$SJOBS_ID/role-mappings/clients/$CLIENT_ID" \
 -H "Authorization: Bearer $ADMIN_TOKEN" \
 -H "Content-Type: application/json" \
 -d '[{"id":"'"$ROLE_ID"'","name":"USER"}]'
@@ -114,7 +114,7 @@ echo "Getting bgates access token"
 echo "==========================="
 
 curl -s -X POST \
-"http://$KEYCLOAK_HOST_PORT/auth/realms/company-services/protocol/openid-connect/token" \
+"http://$KEYCLOAK_HOST_PORT/realms/company-services/protocol/openid-connect/token" \
 -H "Content-Type: application/x-www-form-urlencoded" \
 -d "username=bgates" \
 -d "password=123" \
@@ -126,7 +126,7 @@ echo "Getting sjobs access token"
 echo "=========================="
 
 curl -s -X POST \
-"http://$KEYCLOAK_HOST_PORT/auth/realms/company-services/protocol/openid-connect/token" \
+"http://$KEYCLOAK_HOST_PORT/realms/company-services/protocol/openid-connect/token" \
 -H "Content-Type: application/x-www-form-urlencoded" \
 -d "username=sjobs" \
 -d "password=123" \

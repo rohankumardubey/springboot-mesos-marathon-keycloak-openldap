@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.1.1
+    image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -64,7 +64,7 @@ services:
       - "8090:8090"
 
   mysql:
-    image: mysql:5.7.36
+    image: mysql:5.7.37
     container_name: mysql
     ports:
       - 3306:3306

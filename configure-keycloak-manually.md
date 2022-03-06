@@ -12,7 +12,7 @@
      ```
      KEYCLOAK_HOST_PORT="$(curl -s http://localhost:8090/v2/apps/keycloak | jq -r '.app.tasks[0].host'):$(curl -s http://localhost:8090/v2/apps/keycloak | jq '.app.tasks[0].ports[0]')"
 
-     echo "http://$KEYCLOAK_HOST_PORT/auth/admin/"
+     echo "http://$KEYCLOAK_HOST_PORT/admin/"
      ```
   1. Using [`Marathon`](http://localhost:8090)
 
