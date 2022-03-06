@@ -36,6 +36,7 @@ A new directory called `/var/lib` must be added to Docker `File Sharing` resourc
   ```
   docker-compose up -d
   ```
+  > **Warning**: mesos-slave Docker container is not running, see [issues](#issues)
 
 - Wait for Docker containers to be up and running. To check it, run
   ```
@@ -228,3 +229,14 @@ When `simple-service` is deployed in `Marathon`, it's assigned to it a host and 
   - Go to **Docker Desktop** and open `Preferences...` > `Resources` > `File Sharing`
   - Remove `/var/lib` by clicking the `-` (minus) icon
   - Click `Apply & Restart` button
+
+## Issues
+
+The Docker container `mesos-slave` is not running. The log says
+```
+I0306 19:13:13.388301 34109 main.cpp:366] Version: 1.5.2
+I0306 19:13:13.388335 34109 main.cpp:369] Git tag: 1.5.2
+I0306 19:13:13.388352 34109 main.cpp:373] Git SHA: 3088295d4156eb58d092ad9b3529b85fd33bd36e
+I0306 19:13:13.390044 34109 resolver.cpp:69] Creating default secret resolver
+E0306 19:13:13.390632 34109 main.cpp:498] EXIT with status 1: Failed to create a containerizer: Could not create DockerContainerizer: Failed to create docker: Failed to find a mounted cgroups hierarchy for the 'cpu' subsystem; you probably need to mount cgroups manually
+```
